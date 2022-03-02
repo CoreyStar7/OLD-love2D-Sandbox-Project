@@ -9,6 +9,8 @@ bgAlpha = 50/100
 -- Stats and Fonts
 printStatistics = true
 customFont = true
+
+-- Custom Font
 titleFontSize = 18
 bodyFontSize = 15
 
@@ -20,16 +22,24 @@ loadAudio = true
 -- Load into Memory
 function love.load()
 	-- Requires
-	require("middleclass")
+	--require("middleclass")
 
 	-- Global
 	mediaAssetsPath = "mediaAssets"
 	uiAssetsPath = "uiAssets"
 
 	-- Fonts
-	getDPIScale = love.graphics.getDPIScale()
-	sysInfoTitle = love.graphics.newFont("VCR_OSD_MONO.ttf", titleFontSize, "normal", getDPIScale)
-	sysInfoBody = love.graphics.newFont("VCR_OSD_MONO.ttf", bodyFontSize, "normal", getDPIScale)
+	if customFont then
+		getDPIScale = love.graphics.getDPIScale()
+		sysInfoTitle = love.graphics.newFont("VCR_OSD_MONO.ttf", titleFontSize, "normal", getDPIScale)
+		sysInfoBody = love.graphics.newFont("VCR_OSD_MONO.ttf", bodyFontSize, "normal", getDPIScale)
+		love.graphics.setFont(sysInfoBody)
+	else
+		getDPIScale = love.graphics.getDPIScale()
+		sysInfoTitle = love.graphics.newFont(titleFontSize, "normal", getDPIScale)
+		sysInfoBody = love.graphics.newFont(bodyFontSize, "normal", getDPIScale)
+		love.graphics.setFont(sysInfoBody)
+	end
 
 	-- Image
 	imageData = love.graphics.newImage(mediaAssetsPath.."/examplePhoto.jpg")
@@ -56,15 +66,16 @@ end
 -- Functions --
 function printStats()
 	if printStatistics then
+		width, height = love.window.getMode()
 		love.graphics.print("System Information:",sysInfoTitle,0,0)
-		love.graphics.setFont(sysInfoBody)
 		love.graphics.print("currentOS: "..love.system.getOS(),0,20)
 		love.graphics.print("osPowerInfo: "..love.system.getPowerInfo(),0,35)
 		love.graphics.print("cpuThreads: "..love.system.getProcessorCount(),0,50)
 		love.graphics.print("cpuFrameTime: "..os.clock(),0,65)
 		love.graphics.print("osDate : "..os.date(),0,80)
 		love.graphics.print("osTime : "..os.time(),0,95)
-		--love.graphics.print("envINT: "..os.getenv(),0,110) [BROKEN, HYSTON PLEASE FIX]
+		love.graphics.print("Resolution: "..width.." x "..height,0,110)
+		--love.graphics.print("envINT: "..os.getenv(),0,125) [BROKEN, HYSTON PLEASE FIX]
 	end
 end
 
